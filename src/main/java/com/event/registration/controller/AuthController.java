@@ -24,8 +24,16 @@ public class AuthController {
             throw new InvalidCredentialsException("Invalid username or password");
         }
 
-        String token = tokenProvider.generateToken(request.getUsername());
+        String role = getRoleForUser(request.getUsername());
+        String token = tokenProvider.generateToken(request.getUsername(), role);
         return ResponseEntity.ok(new LoginResponse(token));
+    }
+
+    private String getRoleForUser(String username) {
+        if ("root".equals(username)) {
+            return "ROLE_ADMIN";
+        }
+        return "ROLE_USER";
     }
 
     private boolean isValidCredential(String username, String password) {
