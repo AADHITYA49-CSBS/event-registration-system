@@ -1,0 +1,2 @@
+origin	https://github.com/AADHITYA49-CSBS/event-registration-system.git (fetch)
+origin	https://github.com/AADHITYA49-CSBS/event-registration-system.git (push)

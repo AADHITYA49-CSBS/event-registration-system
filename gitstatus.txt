@@ -1,0 +1,15 @@
+## main...origin/main [behind 1]
+A  README.md
+ M pom.xml
+ M src/main/java/com/event/registration/config/SecurityConfig.java
+AM src/main/java/com/event/registration/controller/AuthController.java
+A  src/main/java/com/event/registration/dto/LoginRequest.java
+AM src/main/java/com/event/registration/dto/LoginResponse.java
+AM src/main/java/com/event/registration/security/JwtAuthenticationFilter.java
+A  src/main/java/com/event/registration/security/JwtTokenProvider.java
+ M src/main/resources/application.properties
+AM src/test/java/com/event/registration/AuthControllerIntegrationTest.java
+ M src/test/resources/application.properties
+?? build.log
+?? gitstatus.txt
+?? test.log
