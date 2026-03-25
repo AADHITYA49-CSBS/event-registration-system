@@ -8,6 +8,7 @@ import com.event.registration.model.Event;
 import com.event.registration.model.EventStatus;
 import com.event.registration.repository.EventRepository;
 import com.event.registration.repository.RegistrationRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventResponseDTO createEvent(EventRequestDTO eventRequestDTO) {
         Event event = new Event(eventRequestDTO.getTitle(), eventRequestDTO.getDate(), eventRequestDTO.getCapacity());
         event.setStatus(event.getDate().isBefore(LocalDateTime.now()) ? EventStatus.CLOSED : EventStatus.OPEN);
@@ -37,6 +39,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventResponseDTO getEventById(Long id) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new EventNotFoundException("Event not found with id: " + id));
@@ -45,6 +48,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public List<EventResponseDTO> getAllEvents(String filter) {
         List<Event> events;
         if ("upcoming".equalsIgnoreCase(filter)) {
@@ -63,6 +67,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventAvailabilityResponse getAvailability(Long eventId) {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventNotFoundException("Event not found with id: " + eventId));

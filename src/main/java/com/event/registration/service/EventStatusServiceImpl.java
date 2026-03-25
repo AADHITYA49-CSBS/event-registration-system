@@ -3,6 +3,7 @@ package com.event.registration.service;
 import com.event.registration.model.Event;
 import com.event.registration.model.EventStatus;
 import com.event.registration.repository.EventRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ public class EventStatusServiceImpl implements EventStatusService {
     }
 
     @Override
+    @Transactional
     public Event syncStatus(Event event, long registrationCount) {
         EventStatus computedStatus = isClosed(event, registrationCount) ? EventStatus.CLOSED : EventStatus.OPEN;
         if (event.getStatus() != computedStatus) {

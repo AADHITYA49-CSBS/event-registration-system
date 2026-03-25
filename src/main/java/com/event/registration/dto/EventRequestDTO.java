@@ -1,5 +1,6 @@
 package com.event.registration.dto;
 
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -12,8 +13,10 @@ public class EventRequestDTO {
     private String title;
 
     @NotNull(message = "Date is required")
+    @Future(message = "Event date must be in the future")
     private LocalDateTime date;
 
+    @NotNull(message = "Capacity is required")
     @Positive(message = "Capacity must be greater than 0")
     private int capacity;
 
