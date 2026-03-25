@@ -1,10 +1,11 @@
 package com.event.registration.service;
 
-import com.event.registration.dto.RegisterOutcomeResponse;
+import com.event.registration.dto.RegistrationRequestDTO;
+import com.event.registration.dto.RegistrationResponseDTO;
 
 public interface RegistrationService {
 
-    RegisterOutcomeResponse register(Long eventId, Long userId);
+    RegistrationResponseDTO register(RegistrationRequestDTO request);
 
     void cancelRegistration(Long registrationId);
 }

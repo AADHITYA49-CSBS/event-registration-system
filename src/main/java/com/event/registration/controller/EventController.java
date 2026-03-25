@@ -1,9 +1,8 @@
 package com.event.registration.controller;
 
-import com.event.registration.dto.CreateEventRequest;
 import com.event.registration.dto.EventAvailabilityResponse;
-import com.event.registration.dto.EventResponse;
-import com.event.registration.model.Event;
+import com.event.registration.dto.EventRequestDTO;
+import com.event.registration.dto.EventResponseDTO;
 import com.event.registration.service.EventService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/events")
@@ -24,25 +22,18 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<EventResponse> createEvent(@Valid @RequestBody CreateEventRequest request) {
-        Event event = new Event(request.getTitle(), request.getDate(), request.getCapacity());
-        Event createdEvent = eventService.createEvent(event);
-        return ResponseEntity.status(HttpStatus.CREATED).body(EventResponse.from(createdEvent));
+    public ResponseEntity<EventResponseDTO> createEvent(@Valid @RequestBody EventRequestDTO request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(eventService.createEvent(request));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventResponse> getEventById(@PathVariable Long id) {
-        Event event = eventService.getEventById(id);
-        return ResponseEntity.ok(EventResponse.from(event));
+    public ResponseEntity<EventResponseDTO> getEventById(@PathVariable Long id) {
+        return ResponseEntity.ok(eventService.getEventById(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<EventResponse>> getAllEvents(@RequestParam(required = false) String filter) {
-        List<EventResponse> eventResponses = eventService.getAllEvents(filter)
-                .stream()
-                .map(EventResponse::from)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(eventResponses);
+    public ResponseEntity<List<EventResponseDTO>> getAllEvents(@RequestParam(required = false) String filter) {
+        return ResponseEntity.ok(eventService.getAllEvents(filter));
     }
 
     @GetMapping("/{id}/availability")

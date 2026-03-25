@@ -1,7 +1,7 @@
 package com.event.registration.controller;
 
-import com.event.registration.dto.RegisterOutcomeResponse;
-import com.event.registration.dto.RegisterRequest;
+import com.event.registration.dto.RegistrationRequestDTO;
+import com.event.registration.dto.RegistrationResponseDTO;
 import com.event.registration.service.RegistrationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,8 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public ResponseEntity<RegisterOutcomeResponse> register(@Valid @RequestBody RegisterRequest request) {
-        RegisterOutcomeResponse result = registrationService.register(request.getEventId(), request.getUserId());
+    public ResponseEntity<RegistrationResponseDTO> register(@Valid @RequestBody RegistrationRequestDTO request) {
+        RegistrationResponseDTO result = registrationService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
