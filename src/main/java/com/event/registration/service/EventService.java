@@ -11,11 +11,7 @@ public interface EventService {
 
     Event getEventById(Long id);
 
-    List<Event> getAllEvents();
+    List<Event> getAllEvents(String filter);
 
-    List<Event> getUpcomingEvents();
-
-    List<Event> getPastEvents();
-
-    EventAvailabilityResponse getEventAvailability(Long eventId);
+    EventAvailabilityResponse getAvailability(Long eventId);
 }

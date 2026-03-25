@@ -1,8 +1,7 @@
 package com.event.registration.controller;
 
+import com.event.registration.dto.RegisterOutcomeResponse;
 import com.event.registration.dto.RegisterRequest;
-import com.event.registration.dto.RegistrationResponse;
-import com.event.registration.model.Registration;
 import com.event.registration.service.RegistrationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -20,9 +19,9 @@ public class RegistrationController {
     }
 
     @PostMapping
-    public ResponseEntity<RegistrationResponse> register(@Valid @RequestBody RegisterRequest request) {
-        Registration registration = registrationService.register(request.getEventId(), request.getUserId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(RegistrationResponse.from(registration));
+    public ResponseEntity<RegisterOutcomeResponse> register(@Valid @RequestBody RegisterRequest request) {
+        RegisterOutcomeResponse result = registrationService.register(request.getEventId(), request.getUserId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @DeleteMapping("/{id}")

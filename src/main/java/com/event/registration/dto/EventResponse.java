@@ -1,6 +1,7 @@
 package com.event.registration.dto;
 
 import com.event.registration.model.Event;
+import com.event.registration.model.EventStatus;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +11,7 @@ public class EventResponse {
     private String title;
     private LocalDateTime date;
     private int capacity;
+    private EventStatus status;
 
     public static EventResponse from(Event event) {
         EventResponse response = new EventResponse();
@@ -17,6 +19,7 @@ public class EventResponse {
         response.setTitle(event.getTitle());
         response.setDate(event.getDate());
         response.setCapacity(event.getCapacity());
+        response.setStatus(event.getStatus());
         return response;
     }
 
@@ -50,5 +53,13 @@ public class EventResponse {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public EventStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EventStatus status) {
+        this.status = status;
     }
 }

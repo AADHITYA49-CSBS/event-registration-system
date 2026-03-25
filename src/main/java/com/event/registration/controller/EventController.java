@@ -37,25 +37,16 @@ public class EventController {
     }
 
     @GetMapping
-    public ResponseEntity<List<EventResponse>> getAllEvents(
-            @RequestParam(required = false) String filter) {
-        List<Event> events;
-        if ("upcoming".equalsIgnoreCase(filter)) {
-            events = eventService.getUpcomingEvents();
-        } else if ("past".equalsIgnoreCase(filter)) {
-            events = eventService.getPastEvents();
-        } else {
-            events = eventService.getAllEvents();
-        }
-        List<EventResponse> responses = events.stream()
+    public ResponseEntity<List<EventResponse>> getAllEvents(@RequestParam(required = false) String filter) {
+        List<EventResponse> eventResponses = eventService.getAllEvents(filter)
+                .stream()
                 .map(EventResponse::from)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(responses);
+        return ResponseEntity.ok(eventResponses);
     }
 
     @GetMapping("/{id}/availability")
     public ResponseEntity<EventAvailabilityResponse> getEventAvailability(@PathVariable Long id) {
-        EventAvailabilityResponse availability = eventService.getEventAvailability(id);
-        return ResponseEntity.ok(availability);
+        return ResponseEntity.ok(eventService.getAvailability(id));
     }
 }
