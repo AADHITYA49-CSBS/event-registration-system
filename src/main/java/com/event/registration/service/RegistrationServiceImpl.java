@@ -1,9 +1,11 @@
 package com.event.registration.service;
 
-import com.event.registration.dto.RegisterOutcomeResponse;
+import com.event.registration.dto.RegistrationRequestDTO;
+import com.event.registration.dto.RegistrationResponseDTO;
 import com.event.registration.dto.RegistrationState;
+import com.event.registration.exception.DuplicateRegistrationException;
 import com.event.registration.exception.EventClosedException;
-import com.event.registration.exception.RegistrationConflictException;
+import com.event.registration.exception.EventNotFoundException;
 import com.event.registration.exception.ResourceNotFoundException;
 import com.event.registration.model.Event;
 import com.event.registration.model.Registration;
@@ -36,16 +38,19 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     @Transactional
-    public RegisterOutcomeResponse register(Long eventId, Long userId) {
+    public RegistrationResponseDTO register(RegistrationRequestDTO request) {
+        Long eventId = request.getEventId();
+        Long userId = request.getUserId();
+
         Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new ResourceNotFoundException("Event not found with id: " + eventId));
+                .orElseThrow(() -> new EventNotFoundException("Event not found with id: " + eventId));
 
         if (registrationRepository.existsByEventIdAndUserId(eventId, userId)) {
-            throw new RegistrationConflictException("User is already registered for this event");
+            throw new DuplicateRegistrationException("User is already registered for this event");
         }
 
         if (waitlistRepository.existsByEventIdAndUserId(eventId, userId)) {
-            throw new RegistrationConflictException("User is already in waitlist for this event");
+            throw new DuplicateRegistrationException("User is already in waitlist for this event");
         }
 
         long registrationCount = registrationRepository.countByEventId(eventId);
@@ -58,7 +63,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         if (registrationCount >= event.getCapacity()) {
             Waitlist waitlist = waitlistRepository.save(new Waitlist(event, userId, LocalDateTime.now()));
 
-            RegisterOutcomeResponse response = new RegisterOutcomeResponse();
+            RegistrationResponseDTO response = new RegistrationResponseDTO();
             response.setState(RegistrationState.WAITLISTED);
             response.setEventId(event.getId());
             response.setUserId(userId);
@@ -70,7 +75,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         Registration registration = registrationRepository.save(new Registration(event, userId));
         eventStatusService.syncStatus(event, registrationCount + 1);
 
-        RegisterOutcomeResponse response = new RegisterOutcomeResponse();
+        RegistrationResponseDTO response = new RegistrationResponseDTO();
         response.setState(RegistrationState.REGISTERED);
         response.setEventId(event.getId());
         response.setUserId(userId);
